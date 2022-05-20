@@ -1,47 +1,71 @@
-/* Assining Buttons */
-const p1Button = document.querySelector('#p1Button');
-const p2Button = document.querySelector('#p2Button');
+
+const p1 = {
+    score: 0,
+    button: document.querySelector('#p1Button'),
+    display: document.querySelector('#p1Score')
+}
+const p2 = {
+    score: 0,
+    button: document.querySelector('#p2Button'),
+    display: document.querySelector('#p2Score')
+}
+
+/* Assigning Buttons */
 const resetButton = document.querySelector('#reset')
 const winningScoreSelect = document.querySelector('#playto')
-/*  Assgning Span */
-const p1Display = document.querySelector('#p1Score')
-const p2Display = document.querySelector('#p2Score')
-/* Counting Score */
-let p1Score = 0
-let p2Score = 0
-const winningScore = 3;
+
+let winningScore = 1;
 let isGameOver = false;
 
-/* Button Function to Update Score*/
-p1Button.addEventListener('click', function(){
+/* Function to Update Scores */
+function updateScores(player, opponent){
     if(!isGameOver){
-        p1Score +=1;
-        if(p1Score === winningScore){
+        player.score +=1;
+        if(player.score === winningScore){
             isGameOver = true;
+            player.display.classList.add('winner')
+            opponent.display.classList.add('loser')
         }
-        p1Display.textContent= p1Score;
+        player.display.textContent= player.score;
     }
+}
+
+
+/* Button Function to Update Score*/
+p1.button.addEventListener('click', function(){
+
+    updateScores(p1, p2)
 })
 
-p2Button.addEventListener('click', function(){
-    if(!isGameOver){
-        p2Score +=1;
-        if(p2Score === winningScore){
-            isGameOver = true;
-        }
-        p2Display.textContent= p2Score;
-    }
+p2.button.addEventListener('click', function(){
+
+    updateScores(p2, p1)
 })
+
+
 /* Function to Detect the Change in Select Button */
 winningScoreSelect.addEventListener('change', function(){
-    winningScore = parseInt(this.value); /* this.value will give the current value of your winning score */
+    winningScore = parseInt(this.value); /* this.value will give the current the select button (winningScoreSelect) */
+    reset()
 })
+
 /* Reset Button Function */
-resetButton.addEventListener('click', function(){
-    p1Score=0
-    p2Score=0
-    p1Display.textContent=0
-    p2Display.textContent=0
-})
+resetButton.addEventListener('click', reset)
 
-
+/* Reset Function */
+function reset(){
+    isGameOver = false
+    for(let p of [p1, p2]){
+        p.score = 0
+        p.display.textContent = 0
+        p.display.classList.remove('winner', 'loser')
+    }
+    
+    // p1.score=0
+    // p2.score=0
+    // p1.display.textContent=0
+    // p2.display.textContent=0
+    // isGameOver = false
+    // p1.display.classList.remove('winner', 'loser')
+    // p2.display.classList.remove('winner','loser')
+}
